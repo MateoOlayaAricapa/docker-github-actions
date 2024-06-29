@@ -36,9 +36,11 @@ jobs:
     - name: Build Docker image
       run: |
         docker build --tag mate0laya/docker-graphql:0.0.2 .
+        docker build --tag mate0laya/docker-graphql:latest .
 
     # Cuarto paso
     # Subiendo imagen a docker hub
     - name: Push Docker Image
       run: |
         docker push mate0laya/docker-graphql:0.0.2
+        docker push mate0laya/docker-graphql:latest
