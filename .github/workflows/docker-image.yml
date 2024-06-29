@@ -20,6 +20,15 @@ jobs:
       with:
         fetch-depth: 0
 
+    # Obteniendo versionamiento automático
+    - name: Git Semantic Version
+      uses: PaulHatch/semantic-version@v4.0.3
+      with:
+        major_pattern: "major:"
+        minor_pattern: "feat:"
+        format: "${major}.${minor}.${patch}-prerelease${increment}"
+      id: version
+
     # Segundo paso
     # Este paso se autentica en docker hub
     - name: Authenticated docker hub
@@ -34,13 +43,17 @@ jobs:
     # Tercer paso
     # Construir la imagen con docker
     - name: Build Docker image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker build --tag mate0laya/docker-graphql:0.0.2 .
+        docker build --tag mate0laya/docker-graphql:$NEW_VERSION .
         docker build --tag mate0laya/docker-graphql:latest .
 
     # Cuarto paso
     # Subiendo imagen a docker hub
     - name: Push Docker Image
+      env:
+        NEW_VERSION: ${{ steps.version.outputs.version }}
       run: |
-        docker push mate0laya/docker-graphql:0.0.2
+        docker push mate0laya/docker-graphql:$NEW_VERSION
         docker push mate0laya/docker-graphql:latest
