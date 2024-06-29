@@ -30,6 +30,15 @@ jobs:
         echo "Iniciando login en docker hub"
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USER --password-stdin
         echo "Finalizando login en docker hub"
-    
-#    - name: Build the Docker image
-#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    # Tercer paso
+    # Construir la imagen con docker
+    - name: Build Docker image
+      run: |
+        docker build --tag mate0laya/docker-graphql:0.0.2 .
+
+    # Cuarto paso
+    # Subiendo imagen a docker hub
+    - name: Push Docker Image
+      run: |
+        docker push mate0laya/docker-graphql:0.0.2
